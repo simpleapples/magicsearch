@@ -15,7 +15,7 @@ SBOX.matchSearch = {
     "google " : "http://www.google.com.hk/search?q=",
     "douban " : "http://www.douban.com/search?q=",
     "weibo " : "http://s.weibo.com/weibo/",
-    "taobao " : "http://s.taobao.com/search?q=12"
+    "taobao " : "http://s.taobao.com/search?q="
 };
 SBOX.searchImg = {
     "amazon " : "0",
