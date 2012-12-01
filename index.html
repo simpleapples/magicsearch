@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8" />
+        <title>MagicSearch &bull; simpleapples</title>
+        <script src="main.js"></script>
+        <style>
+            body,div {
+                font-family:"Helvetica",sans-serif;
+                margin:0 auto;
+                text-align:center;
+            }
+            #logo {
+                width:500px;
+                height:200px;
+                background:url("img/logo.jpg") center no-repeat;
+            }
+            #input {
+                text-align:left;
+                width:600px;
+                height:40px;
+            }
+            #searchbox {
+                font-family:"Helvetica",sans-serif;
+                width:600px;
+                height:40px;
+                border:solid #ddd 2px;
+                font-size:24px;
+                padding:0 10px 0 10px;
+            }
+            label {
+                float:left;
+                position:relative;
+                left:13px;
+                top:-34px;
+                font-size:24px;
+                color:#ccc;
+            }
+            #sug1 {
+                color:#000;
+            }
+            #searchlogo {
+                float:right;
+                position:relative;
+                top:-42px;
+                right:-23px;
+                width:40px;
+                height:40px;
+                background: url("img/searchlogo.jpg") -80px 0px no-repeat;
+                cursor:pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="head">
+            <div id="logo"></div>
+        </div>
+        <div id="content">
+            <div id="input">
+                <input id="searchbox" name="searchbox" type="text" oninput="disMenu()" onpropertychange="disMenu()" onfocus="disMenu()" onblur="disBlur()" autocomplete="off" />
+                <label id="suggestion" for="searchbox"><span id="sug1"></span><span id="sug2">input here...</span></label>
+                <div id="searchlogo" onclick="chgLogo()"></div>
+            </div>
+        </div>
+        <div id="foot">
+        </div>
+        <script>
+            init();
+        </script>
+    </body>
+</html>
+        
+
+
