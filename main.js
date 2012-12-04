@@ -9,20 +9,25 @@
 #      History:
 =============================================================================*/
 var SBOX = { };
-SBOX.matchArr = ["amazon ", "weibo ", "google ", "douban ", "taobao "];
+SBOX.matchArr = ["amazon ", "weibo ", "google ", "douban ", "taobao ", "dict ", "mail "];
 SBOX.matchSearch = {
     "amazon " : "http://www.amazon.cn/s/field-keywords=",
     "google " : "http://www.google.com.hk/search?q=",
     "douban " : "http://www.douban.com/search?q=",
     "weibo " : "http://s.weibo.com/weibo/",
-    "taobao " : "http://s.taobao.com/search?q="
+    "taobao " : "http://s.taobao.com/search?q=",
+    "dict " : "http://dict.youdao.com/search?q=",
+    "mail " : "mailto:"
 };
 SBOX.searchImg = {
     "amazon " : "0",
     "google " : "80",
     "douban " : "40",
     "weibo " : "160",
-    "taobao " : "120"
+    "taobao " : "120",
+    "dict " : "200",
+    "mail " : "240",
+    "calc " : "280"
 };
 SBOX.searchBtn = {
     search : "google "
@@ -83,6 +88,9 @@ function submit(loc) {
         url = searchUrl + subText.value;
     if (loc == 1) {
         window.location.href = url;
+        if (SBOX.searchBtn.search === "mail ") {
+            self.location.reload();
+        }
     }
 }
 function disBlur() {
@@ -90,29 +98,33 @@ function disBlur() {
         textSug2 =  document.getElementById("sug2");
     if (!textOri.value) {
         textSug2.innerHTML = "input here...";
-    }
+     }
 }
 function disMenu() {
     var searchLogo = document.getElementById("searchlogo"),
         textSug1 = document.getElementById("sug1"),
         textSug2 = document.getElementById("sug2"),
         textOri = document.getElementById("searchbox"),
-        textSug = document.getElementById("suggestion"), textReq;
+        textSug = document.getElementById("suggestion"),
+        textReq;
     textSug1.innerHTML = "";
     textSug2.innerHTML = "";
     if (SBOX.searchBtn.search == "google ") {
         textReq = textMatch(textOri.value);
-        if (textReq == -1) {
-            textSug1.innerHTML = "";
-            textSug2.innerHTML = "";
-            return false;
-        } else if (textReq == 1) {
+        if (textReq === 1) {
             SBOX.searchBtn.search = textOri.value;
-            textSug1.innerHTML = "";
-            textSug2.innerHTML = "";
+            //textSug1.innerHTML = "";
+            //textSug2.innerHTML = "";
             textOri.value = "";
-        } else {
-            textSug1.innerHTML = textReq.slice(0,textOri.value.length);
+        } else if (textReq === "mathOperation") {
+            textSug1.innerHTML = textOri.value;
+            try {
+                textSug2.innerHTML = " = " + eval(textOri.value);  
+            } catch(e) {
+            }
+            SBOX.searchBtn.search = "calc ";
+        } else if (textReq !== -1) {
+            textSug1.innerHTML = textReq.slice(0, textOri.value.length);
             textSug2.innerHTML = textReq.slice(textOri.value.length);
         }
     } 
@@ -120,10 +132,18 @@ function disMenu() {
     submit(0);
 }
 function textMatch(inText) {
-    var i, j, searchName;
+    var i, 
+        j, 
+        searchName,
+        pattern = /[\+\-]?\d+(\.\d+)?[\+\-\*\/]\d+(\.\d+)?([\+\-\*\/]\d+(\.\d+)?)*/;
     if (!inText) {
         return -1;
     }
+    if (pattern.test(inText)) {
+        console.log("math");
+        return "mathOperation"; 
+    }
+    if(inText)
     for (i = SBOX.matchArr.length; i--;) {
         searchName = SBOX.matchArr[i];
         for (j = 0; j < inText.length; j++) {
