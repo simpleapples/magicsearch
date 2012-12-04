@@ -9,7 +9,7 @@
 #      History:
 =============================================================================*/
 var SBOX = { };
-SBOX.matchArr = new Array("amazon ","weibo ","google ","douban ","taobao ");
+SBOX.matchArr = ["amazon ","weibo ","google ","douban ","taobao "];
 SBOX.matchSearch = {
     "amazon " : "http://www.amazon.cn/s/field-keywords=",
     "google " : "http://www.google.com.hk/search?q=",
@@ -28,12 +28,12 @@ SBOX.searchBtn = {
     search : "google ",
 };
 function init() {
+    var textOri = document.getElementById("searchbox"),
+        textSug1 = document.getElementById("sug1"),
+        textSug2 = document.getElementById("sug2"); 
     disLogo();
     submit(0);
     disSelc();
-    var textOri = document.getElementById("searchbox");
-    var textSug1 = document.getElementById("sug1");
-    var textSug2 = document.getElementById("sug2"); 
     document.getElementById("searchbox").onkeydown = function(event) {
         if(event.keyCode == 13) {
             if(textSug1.innerHTML && textSug2.innerHTML) {
@@ -50,22 +50,21 @@ function init() {
     }
 }
 function disSelc() {
-    var list =  document.getElementById("selectlist");
-    console.log("select"); 
-    for(var i = 0; i < SBOX.searchImg.length; i++) {
-        console.log("s" + i);
-        var listEle = document.createElement("li");
+    var list =  document.getElementById("selectlist"),
+        listEle = document.createElement("li"),
+        i;
+    for(i = SBOX.searchImg.length; i--;) {
         listEle.style.backgroundImage = "img/" + SBOX.searchImg[i];
         list.appendChild(listEle); 
     }
 }
 function chgLogo() {
+    var textOri = document.getElementById("searchbox"),
+        textSug1 = document.getElementById("sug1"),
+        textSug2 = document.getElementById("sug2");
     if(SBOX.searchBtn.search == "google " && document.getElementById("searchbox").value) {
         submit(1);
     } else {
-        var textOri = document.getElementById("searchbox");
-        var textSug1 = document.getElementById("sug1");
-        var textSug2 = document.getElementById("sug2");
         SBOX.searchBtn.search = "google ";
         textOri.value = "";
         textSug1.innerHTML = "";
@@ -75,9 +74,9 @@ function chgLogo() {
     }
 }
 function submit(loc) {
-    var subText = document.getElementById("searchbox");
-    var searchUrl = SBOX.matchSearch[SBOX.searchBtn.search];
-    var url = searchUrl + subText.value;
+    var subText = document.getElementById("searchbox"),
+        searchUrl = SBOX.matchSearch[SBOX.searchBtn.search],
+        url = searchUrl + subText.value;
     if(loc == 1) {
         window.location.href = url;
     }
@@ -87,26 +86,23 @@ function disLogo() {
     logoImg.style.backgroundPosition = SBOX.searchImg[SBOX.searchBtn.search] * (-1) + "px 0";
 }
 function disBlur() {
-    var textOri = document.getElementById("searchbox");
-    var textSug2 =  document.getElementById("sug2");
+    var textOri = document.getElementById("searchbox"),
+        textSug2 =  document.getElementById("sug2");
     if(!textOri.value) {
         textSug2.innerHTML = "input here...";
     }
 }
 function disMenu() {
-    var searchLogo = document.getElementById("searchlogo");
-    var textSug1 = document.getElementById("sug1");
-    var textSug2 = document.getElementById("sug2");
+    var searchLogo = document.getElementById("searchlogo"),
+        textSug1 = document.getElementById("sug1"),
+        textSug2 = document.getElementById("sug2"),
+        textOri = document.getElementById("searchbox"),
+        textSug = document.getElementById("suggestion"), textReq;
     textSug1.innerHTML = "";
     textSug2.innerHTML = "";
     if(SBOX.searchBtn.search == "google ") {
-        console.log("searchstart");
-        var textOri = document.getElementById("searchbox");
-        var textSug = document.getElementById("suggestion");
-        var textReq = textMatch(textOri.value);
-        console.log(textReq);
+        textReq = textMatch(textOri.value);
         if(textReq == -1) {
-            //console.log(textReq);
             textSug1.innerHTML = "";
             textSug2.innerHTML = "";
             return false;
@@ -118,25 +114,18 @@ function disMenu() {
         } else {
             textSug1.innerHTML = textReq.slice(0,textOri.value.length);
             textSug2.innerHTML = textReq.slice(textOri.value.length);
-            //console.log("oupt1:" + textSug1.innerHTML);
         }
     } 
-    //else {
-    //   SBOX.searchBtn.search = "google ";
-    //}
     disLogo();
     submit(0);
 }
 function textMatch(inText) {
-    var i = 0;
-    var j = 0;
+    var i, j, searchName;
     if(!inText) {
         return -1;
     }
-    for(i = 0; i < SBOX.matchArr.length; i++) {
-        //var flag = 1;
-        var searchName = SBOX.matchArr[i];
-        //console.log(SBOX.matchArr[i]);
+    for(i = SBOX.matchArr.length; i--;) {
+        searchName = SBOX.matchArr[i];
         for(j = 0; j < inText.length; j++) {
             if(inText[j] != searchName[j]) {
                  break;
