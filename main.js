@@ -9,7 +9,7 @@
 #      History:
 =============================================================================*/
 var SBOX = { };
-SBOX.matchArr = ["amazon ","weibo ","google ","douban ","taobao "];
+SBOX.matchArr = ["amazon ", "weibo ", "google ", "douban ", "taobao "];
 SBOX.matchSearch = {
     "amazon " : "http://www.amazon.cn/s/field-keywords=",
     "google " : "http://www.google.com.hk/search?q=",
@@ -25,8 +25,21 @@ SBOX.searchImg = {
     "taobao " : "120"
 };
 SBOX.searchBtn = {
-    search : "google ",
+    search : "google "
 };
+function disLogo() {
+    var logoImg = document.getElementById("searchlogo");
+    logoImg.style.backgroundPosition = SBOX.searchImg[SBOX.searchBtn.search] * (-1) + "px 0";
+}
+function disSelc() {
+    var list =  document.getElementById("selectlist"),
+        listEle = document.createElement("li"),
+        i;
+    for (i = SBOX.searchImg.length; i--;) {
+        listEle.style.backgroundImage = "img/" + SBOX.searchImg[i];
+        list.appendChild(listEle); 
+    }
+}
 function init() {
     var textOri = document.getElementById("searchbox"),
         textSug1 = document.getElementById("sug1"),
@@ -34,8 +47,8 @@ function init() {
     disLogo();
     submit(0);
     disSelc();
-    document.getElementById("searchbox").onkeydown = function(event) {
-        if(event.keyCode == 13) {
+    document.getElementById("searchbox").onkeydown = function (event) {
+        if (event.keyCode == 13) {
             if(textSug1.innerHTML && textSug2.innerHTML) {
                 SBOX.searchBtn.search = textSug1.innerHTML + textSug2.innerHTML;
                 textOri.value = "";
@@ -49,20 +62,11 @@ function init() {
         }
     }
 }
-function disSelc() {
-    var list =  document.getElementById("selectlist"),
-        listEle = document.createElement("li"),
-        i;
-    for(i = SBOX.searchImg.length; i--;) {
-        listEle.style.backgroundImage = "img/" + SBOX.searchImg[i];
-        list.appendChild(listEle); 
-    }
-}
 function chgLogo() {
     var textOri = document.getElementById("searchbox"),
         textSug1 = document.getElementById("sug1"),
         textSug2 = document.getElementById("sug2");
-    if(SBOX.searchBtn.search == "google " && document.getElementById("searchbox").value) {
+    if (SBOX.searchBtn.search == "google " && document.getElementById("searchbox").value) {
         submit(1);
     } else {
         SBOX.searchBtn.search = "google ";
@@ -77,18 +81,14 @@ function submit(loc) {
     var subText = document.getElementById("searchbox"),
         searchUrl = SBOX.matchSearch[SBOX.searchBtn.search],
         url = searchUrl + subText.value;
-    if(loc == 1) {
+    if (loc == 1) {
         window.location.href = url;
     }
-}
-function disLogo() {
-    var logoImg = document.getElementById("searchlogo");
-    logoImg.style.backgroundPosition = SBOX.searchImg[SBOX.searchBtn.search] * (-1) + "px 0";
 }
 function disBlur() {
     var textOri = document.getElementById("searchbox"),
         textSug2 =  document.getElementById("sug2");
-    if(!textOri.value) {
+    if (!textOri.value) {
         textSug2.innerHTML = "input here...";
     }
 }
@@ -100,13 +100,13 @@ function disMenu() {
         textSug = document.getElementById("suggestion"), textReq;
     textSug1.innerHTML = "";
     textSug2.innerHTML = "";
-    if(SBOX.searchBtn.search == "google ") {
+    if (SBOX.searchBtn.search == "google ") {
         textReq = textMatch(textOri.value);
-        if(textReq == -1) {
+        if (textReq == -1) {
             textSug1.innerHTML = "";
             textSug2.innerHTML = "";
             return false;
-        } else if(textReq == 1) {
+        } else if (textReq == 1) {
             SBOX.searchBtn.search = textOri.value;
             textSug1.innerHTML = "";
             textSug2.innerHTML = "";
@@ -121,20 +121,20 @@ function disMenu() {
 }
 function textMatch(inText) {
     var i, j, searchName;
-    if(!inText) {
+    if (!inText) {
         return -1;
     }
-    for(i = SBOX.matchArr.length; i--;) {
+    for (i = SBOX.matchArr.length; i--;) {
         searchName = SBOX.matchArr[i];
-        for(j = 0; j < inText.length; j++) {
-            if(inText[j] != searchName[j]) {
+        for (j = 0; j < inText.length; j++) {
+            if (inText[j] != searchName[j]) {
                  break;
             }
         }
-        if(j == SBOX.matchArr[i].length) {
+        if (j == SBOX.matchArr[i].length) {
             return 1;
         }
-        if(j == inText.length) {
+        if (j == inText.length) {
             return SBOX.matchArr[i];
         }
     }
