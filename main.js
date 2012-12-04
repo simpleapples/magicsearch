@@ -8,7 +8,7 @@
 #   LastChange: 2012-11-30 21:55:04
 #      History:
 =============================================================================*/
-var SBOX = { };
+var SBOX = {};
 SBOX.matchArr = ["amazon ", "weibo ", "google ", "douban ", "taobao ", "dict ", "mail "];
 SBOX.matchSearch = {
     "amazon " : "http://www.amazon.cn/s/field-keywords=",
