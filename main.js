@@ -109,7 +109,7 @@ function disMenu() {
         textReq;
     textSug1.innerHTML = "";
     textSug2.innerHTML = "";
-    if (SBOX.searchBtn.search == "google ") {
+    //if (SBOX.searchBtn.search == "google ") {
         textReq = textMatch(textOri.value);
         if (textReq === 1) {
             SBOX.searchBtn.search = textOri.value;
@@ -118,16 +118,13 @@ function disMenu() {
             textOri.value = "";
         } else if (textReq === "mathOperation") {
             textSug1.innerHTML = textOri.value;
-            try {
-                textSug2.innerHTML = " = " + eval(textOri.value);  
-            } catch(e) {
-            }
+            textSug2.innerHTML = " = " + eval(textOri.value);  
             SBOX.searchBtn.search = "calc ";
         } else if (textReq !== -1) {
             textSug1.innerHTML = textReq.slice(0, textOri.value.length);
             textSug2.innerHTML = textReq.slice(textOri.value.length);
         }
-    } 
+    //} 
     disLogo();
     submit(0);
 }
