@@ -4,11 +4,11 @@
 #       Author: Zhiya Zang
 #        Email: zangzhiya@gmail.com
 #     HomePage: http://www.simpleapples.com
-#      Version: 0.0.1
-#   LastChange: 2012-11-30 21:55:04
+#      Version: 0.0.5
+#   LastChange: 2012-12-08 12:08:28
 #      History:
 =============================================================================*/
-var SBOX = {};
+var SBOX = { };
 SBOX.matchArr = ["amazon ", "weibo ", "google ", "douban ", "taobao ", "dict ", "mail "];
 SBOX.matchSearch = {
     "amazon " : "http://www.amazon.cn/s/field-keywords=",
@@ -36,13 +36,24 @@ function disLogo() {
     var logoImg = document.getElementById("searchlogo");
     logoImg.style.backgroundPosition = SBOX.searchImg[SBOX.searchBtn.search] * (-1) + "px 0";
 }
-function disSelc() {
-    var list =  document.getElementById("selectlist"),
-        listEle = document.createElement("li"),
-        i;
-    for (i = SBOX.searchImg.length; i--;) {
-        listEle.style.backgroundImage = "img/" + SBOX.searchImg[i];
-        list.appendChild(listEle); 
+function clrText(text1, text2, text3) {
+    var textSug1 = document.getElementById("sug1"),
+        textSug2 = document.getElementById("sug2"),
+        textOri = document.getElementById("searchbox");
+    if (text1 === 1) {
+        textSug1.innerHTML = "";
+    } else {
+        textSug1.innerHTML = text1; 
+    }
+    if (text2 === 1) {
+        textSug2.innerHTML = "";
+    } else {
+        textSug2.innerHTML = text2; 
+    } 
+    if (text3 === 1) {
+        textOri.value = ""; 
+    } else if (text3 !== 0) {
+        textOri.value = text3;
     }
 }
 function init() {
@@ -51,14 +62,11 @@ function init() {
         textSug2 = document.getElementById("sug2"); 
     disLogo();
     submit(0);
-    disSelc();
-    document.getElementById("searchbox").onkeydown = function (event) {
+    textOri.onkeydown = function (event) {
         if (event.keyCode == 13) {
             if(textSug1.innerHTML && textSug2.innerHTML) {
                 SBOX.searchBtn.search = textSug1.innerHTML + textSug2.innerHTML;
-                textOri.value = "";
-                textSug1.innerHTML = "";
-                textSug2.innerHTML = "";
+                clrText(1,1,1);
                 disLogo();
                 submit(0);
             } else {
@@ -68,16 +76,12 @@ function init() {
     }
 }
 function chgLogo() {
-    var textOri = document.getElementById("searchbox"),
-        textSug1 = document.getElementById("sug1"),
-        textSug2 = document.getElementById("sug2");
+    var textOri = document.getElementById("searchbox");
     if (SBOX.searchBtn.search == "google " && document.getElementById("searchbox").value) {
         submit(1);
     } else {
         SBOX.searchBtn.search = "google ";
-        textOri.value = "";
-        textSug1.innerHTML = "";
-        textSug2.innerHTML = "input here...";
+        clrText(1,"input here...",1)
         disLogo();
         submit(0);
     }
@@ -94,37 +98,25 @@ function submit(loc) {
     }
 }
 function disBlur() {
-    var textOri = document.getElementById("searchbox"),
-        textSug2 =  document.getElementById("sug2");
+    var textOri = document.getElementById("searchbox");
     if (!textOri.value) {
-        textSug2.innerHTML = "input here...";
-     }
+        clrText(1,"input here...",1);
+    }
 }
 function disMenu() {
-    var searchLogo = document.getElementById("searchlogo"),
-        textSug1 = document.getElementById("sug1"),
-        textSug2 = document.getElementById("sug2"),
-        textOri = document.getElementById("searchbox"),
-        textSug = document.getElementById("suggestion"),
+    var textOri = document.getElementById("searchbox"),
         textReq;
-    textSug1.innerHTML = "";
-    textSug2.innerHTML = "";
-    //if (SBOX.searchBtn.search == "google ") {
-        textReq = textMatch(textOri.value);
-        if (textReq === 1) {
-            SBOX.searchBtn.search = textOri.value;
-            //textSug1.innerHTML = "";
-            //textSug2.innerHTML = "";
-            textOri.value = "";
-        } else if (textReq === "mathOperation") {
-            textSug1.innerHTML = textOri.value;
-            textSug2.innerHTML = " = " + eval(textOri.value);  
-            SBOX.searchBtn.search = "calc ";
-        } else if (textReq !== -1) {
-            textSug1.innerHTML = textReq.slice(0, textOri.value.length);
-            textSug2.innerHTML = textReq.slice(textOri.value.length);
-        }
-    //} 
+    clrText(1,1,0); 
+    textReq = textMatch(textOri.value);
+    if (textReq === 1) {
+        SBOX.searchBtn.search = textOri.value;
+        clrText(1,1,1);
+    } else if (textReq === "mathOperation") {
+        clrText(textOri.value, " = " + eval(textOri.value), 0);
+        SBOX.searchBtn.search = "calc ";
+    } else if (textReq !== -1) {
+        clrText(textReq.slice(0, textOri.value.length), textReq.slice(textOri.value.length), 0);
+    }
     disLogo();
     submit(0);
 }
@@ -136,6 +128,7 @@ function textMatch(inText) {
     if (!inText) {
         return -1;
     }
+    // 判断是否为四则运算式
     if (pattern.test(inText)) {
         console.log("math");
         return "mathOperation"; 
@@ -148,9 +141,11 @@ function textMatch(inText) {
                  break;
             }
         }
+        // 判断是否输入了完整的搜索引擎名称
         if (j == SBOX.matchArr[i].length) {
             return 1;
         }
+        // 返回建议的搜索引擎名称
         if (j == inText.length) {
             return SBOX.matchArr[i];
         }
